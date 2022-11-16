@@ -76,16 +76,15 @@ const getNoteByIdHandler = (request, h) => {
   return response
 }
 
-function editNodeByHandlerId (request, h) {
+const editNodeByHandlerId = (request, h) => {
   const { id } = request.params
   // dapatkan data notes terbaru
   const { title, tags, body } = request.payload
   const updatedAt = new Date().toISOString()
   // const index = notes.findIndex((note)=> note.id === id);
-  // OR
   const index = notes.findIndex(note => {
     return note.id === id;
-  })
+  });
 
   // Bila note dengan id yang dicari ditemukan,
   // maka index akan bernilai array index dari objek catatan yang dicari
@@ -112,8 +111,31 @@ function editNodeByHandlerId (request, h) {
   });
   response.code(404);
   return response
-
 }
 
+const deleteNoteByIdHandler = (request, h) =>{
+  const{id} = request.params;
+  // dapatkan index dari objek catatan sesuai dengan id yang didapat
+  const index = notes.findIndex((note)=> note.id === id);
+
+  if (index !== -1){
+    notes.splice(index, 1);
+    const response = h.response({
+        status: "success",
+        message: "catatan berhasil dihapus"
+    });
+    response.code(200);
+    return response;
+  };
+
+  const response = h.response({
+    status: "failed",
+    message: "catatan gagal dihapus, ID tidak ditemukan!",
+  });
+  response.code(404);
+  return response;
+
+};
+
 // Objek literals bertujuan untuk memudahkan ekspor lebih dari satu nilai pada satu berkas JavaScript.
-module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler, editNodeByHandlerId }
+module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler, editNodeByHandlerId, deleteNoteByIdHandler };

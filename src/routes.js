@@ -1,4 +1,4 @@
-const { addNoteHandler, getAllNotesHandler, getNoteByIdHandler,editNodeByHandlerId } = require("./handler");
+const { addNoteHandler, getAllNotesHandler, getNoteByIdHandler,editNodeByHandlerId, deleteNoteByIdHandler } = require("./handler");
 
 const routes = [
     // MEMBUAT POST
@@ -7,7 +7,7 @@ const routes = [
         path: "/notes",
         handler: addNoteHandler,
     },
-    // MENAMPILKAN NOTES DI HOME
+    // MENAMPILKAN SEMUA NOTES DI HOME
     {
         method: "GET",
         path: "/notes",
@@ -25,6 +25,12 @@ const routes = [
         method: "PUT", 
         path: `/notes/{id}`,
         handler: editNodeByHandlerId,
+    },
+    // Menghapus data
+    {
+        method:"DELETE",
+        path: `/notes/{id}`,
+        handler: deleteNoteByIdHandler,
     }
 ];
 
