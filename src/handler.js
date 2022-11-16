@@ -4,12 +4,12 @@ const notes = require('./notes')
 
 const addNoteHandler = (request, h) => {
   // mendapatkan body request di Hapi
-  const { title, tags, body } = request.payloads
+  const { title, tags, body } = request.payload
   // Properti ID
   const id = nanoid(16)
   // createdAt & UpdatedAt ID
   const createdAt = new Date().toISOString()
-  const UpdatedAt = createdAt
+  const updatedAt = createdAt
 
   const newNote = {
     title,
@@ -17,35 +17,32 @@ const addNoteHandler = (request, h) => {
     body,
     id,
     createdAt,
-    UpdatedAt
+    updatedAt
   }
 
   notes.push(newNote)
 
   // menentukan apakah newNote sudah masuk ke dalam array notes?
-  const isSuccess =
-    notes.filter(note => {
-      note.id === id
-    }).length > 0
+  const isSuccess = notes.filter((note) => note.id === id).length > 0;
 
   if (isSuccess) {
     const response = h.response({
       status: 'success',
-      message: 'Data berhasil ditambahkan',
+      message: 'Catatan berhasil ditambahkan',
       data: {
-        noteId: id
-      }
+        noteId: id,
+      },
     });
     response.code(201);
     return response;
   }
   const response = h.response({
-    status: "fail",
-    message: "catatan gagal ditambahkan",
+    status: 'fail',
+    message: 'catatan gagal ditambahkan'
   });
   response.code(500);
   return response;
 }
 
 // Objek literals bertujuan untuk memudahkan ekspor lebih dari satu nilai pada satu berkas JavaScript.
-module.exports = { addNoteHandler };
+module.exports = { addNoteHandler }
