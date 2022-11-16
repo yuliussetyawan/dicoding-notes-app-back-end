@@ -1,4 +1,4 @@
-const { addNoteHandler } = require("./handler");
+const { addNoteHandler, getAllNotesHandler, getNoteByIdHandler } = require("./handler");
 
 const routes = [
     {
@@ -6,6 +6,19 @@ const routes = [
         path: "/notes",
         handler: addNoteHandler,
     },
+    // menampilkan notes di home
+    {
+        method: "GET",
+        path: "/notes",
+        handler: getAllNotesHandler,
+
+    },
+    // menampilkan notes setelah diklik
+    {
+        method: "GET",
+        path: `/notes/{id}`,
+        handler: getNoteByIdHandler,
+    }
 ];
 
 module.exports = routes;
