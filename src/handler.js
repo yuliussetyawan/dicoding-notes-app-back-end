@@ -48,36 +48,72 @@ const addNoteHandler = (request, h) => {
 const getAllNotesHandler = () => ({
   status: 'success',
   data: {
-    notes
-  },
-});
+    notes,
+  }
+})
 
 // Menampilkan hasil notes setelah diklik
-const getNoteByIdHandler = (request, h) =>{
-  const {id} = request.params;
+const getNoteByIdHandler = (request, h) => {
+  const { id } = request.params
   // dapatkan objek note dengan id tersebut dari objek array notes
-  const note = notes.filter((n)=> n.id === id)[0];
-  console.log(note);
+  const note = notes.filter(n => n.id === id)[0]
+  console.log(note)
 
-  if (note !== undefined){
-    return{
-      status: "success",
-      data:{
-        note,
-      },
+  if (note !== undefined) {
+    return {
+      status: 'success',
+      data: {
+        note
+      }
     }
-  };
+  }
 
   const response = h.response({
-    status: "fail",
-    message: "catatan tidak ditemukan",
+    status: 'fail',
+    message: 'catatan tidak ditemukan'
+  })
+  response.code = 404
+  return response
+}
 
+function editNodeByHandlerId (request, h) {
+  const { id } = request.params
+  // dapatkan data notes terbaru
+  const { title, tags, body } = request.payload
+  const updatedAt = new Date().toISOString()
+  // const index = notes.findIndex((note)=> note.id === id);
+  // OR
+  const index = notes.findIndex(note => {
+    return note.id === id;
+  })
+
+  // Bila note dengan id yang dicari ditemukan,
+  // maka index akan bernilai array index dari objek catatan yang dicari
+  if (index !== -1) {
+    notes[index] = {
+      // Spread operator digunakan untuk mempertahankan nilai notes[index] yang tidak perlu diubah
+      ...notes[index],
+      title,
+      tags,
+      body,
+      updatedAt
+    }
+
+    const response = h.response({
+      status: 'success',
+      message: 'catatan berhasil diperbarui'
+    })
+    response.code(200);
+    return response;
+  }
+  const response = h.response({
+    status:"failed",
+    message: "catatan gagal diperbarui, ID tidak ditemukan",
   });
-  response.code = 404;
-  return response;
+  response.code(404);
+  return response
 
 }
 
-
 // Objek literals bertujuan untuk memudahkan ekspor lebih dari satu nilai pada satu berkas JavaScript.
-module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler};
+module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler, editNodeByHandlerId }
