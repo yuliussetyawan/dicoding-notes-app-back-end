@@ -1,4 +1,4 @@
-const { addNoteHandler, getAllNotesHandler, getNoteByIdHandler,editNodeByHandlerId, deleteNoteByIdHandler } = require("./handler");
+const { addNoteHandler, getAllNotesHandler, getNoteByIdHandler,editNoteByHandlerId, deleteNoteByIdHandler } = require("./handler");
 
 const routes = [
     // MEMBUAT POST
@@ -24,7 +24,7 @@ const routes = [
     {
         method: "PUT", 
         path: `/notes/{id}`,
-        handler: editNodeByHandlerId,
+        handler: editNoteByHandlerId,
     },
     // Menghapus data
     {

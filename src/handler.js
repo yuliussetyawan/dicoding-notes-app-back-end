@@ -2,6 +2,7 @@
 const { nanoid } = require('nanoid')
 const notes = require('./notes')
 
+// MENAMBAHKAN NOTE
 const addNoteHandler = (request, h) => {
   // mendapatkan body request di Hapi
   const { title, tags, body } = request.payload
@@ -23,14 +24,14 @@ const addNoteHandler = (request, h) => {
   notes.push(newNote)
 
   // menentukan apakah newNote sudah masuk ke dalam array notes?
-  const isSuccess = notes.filter(note => note.id === id).length > 0
+  const isSuccess = notes.filter(note => note.id === id).length > 0;
 
   if (isSuccess) {
     const response = h.response({
       status: 'success',
       message: 'Catatan berhasil ditambahkan',
       data: {
-        noteId: id
+        noteId: id,
       }
     })
     response.code(201)
@@ -44,7 +45,7 @@ const addNoteHandler = (request, h) => {
   return response
 }
 
-// menampilkan notes di halaman home. parameter h, req tidak digunakan
+// MENAMPILKAN NOTES DI HALAMAN NOTE. parameter h, req tidak digunakan
 const getAllNotesHandler = () => ({
   status: 'success',
   data: {
@@ -52,31 +53,31 @@ const getAllNotesHandler = () => ({
   }
 })
 
-// Menampilkan hasil notes setelah diklik
+// MENAMPILKAN HASIL NOTE SETELAH DIKLIK
 const getNoteByIdHandler = (request, h) => {
   const { id } = request.params
   // dapatkan objek note dengan id tersebut dari objek array notes
-  const note = notes.filter(n => n.id === id)[0]
-  console.log(note)
+  const note = notes.filter((n) => n.id === id)[0];
 
   if (note !== undefined) {
     return {
       status: 'success',
       data: {
-        note
-      }
-    }
+        note,
+      },
+    };
   }
 
   const response = h.response({
     status: 'fail',
-    message: 'catatan tidak ditemukan'
+    message: 'Catatan tidak ditemukan'
   })
-  response.code = 404
-  return response
+  response.code(404);
+  return response;
 }
 
-const editNodeByHandlerId = (request, h) => {
+// UPDATE NOTE
+const editNoteByHandlerId = (request, h) => {
   const { id } = request.params
   // dapatkan data notes terbaru
   const { title, tags, body } = request.payload
@@ -100,19 +101,20 @@ const editNodeByHandlerId = (request, h) => {
 
     const response = h.response({
       status: 'success',
-      message: 'catatan berhasil diperbarui'
+      message: 'Catatan berhasil diperbarui'
     })
     response.code(200);
     return response;
   }
   const response = h.response({
-    status:"failed",
-    message: "catatan gagal diperbarui, ID tidak ditemukan",
+    status:"fail",
+    message: "Catatan gagal diperbarui, ID tidak ditemukan",
   });
   response.code(404);
   return response
 }
 
+// MENGHAPUS NOTE
 const deleteNoteByIdHandler = (request, h) =>{
   const{id} = request.params;
   // dapatkan index dari objek catatan sesuai dengan id yang didapat
@@ -122,15 +124,15 @@ const deleteNoteByIdHandler = (request, h) =>{
     notes.splice(index, 1);
     const response = h.response({
         status: "success",
-        message: "catatan berhasil dihapus"
+        message: "Catatan berhasil dihapus",
     });
     response.code(200);
     return response;
   };
 
   const response = h.response({
-    status: "failed",
-    message: "catatan gagal dihapus, ID tidak ditemukan!",
+    status: 'fail',
+    message: "Catatan gagal dihapus. Id tidak ditemukan",
   });
   response.code(404);
   return response;
@@ -138,4 +140,4 @@ const deleteNoteByIdHandler = (request, h) =>{
 };
 
 // Objek literals bertujuan untuk memudahkan ekspor lebih dari satu nilai pada satu berkas JavaScript.
-module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler, editNodeByHandlerId, deleteNoteByIdHandler };
+module.exports = { addNoteHandler, getAllNotesHandler, getNoteByIdHandler, editNoteByHandlerId, deleteNoteByIdHandler };
